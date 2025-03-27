@@ -38,12 +38,12 @@ class Grafo:
         nodo_origen = self.agregar_nodo(origen)
         nodo_destino = self.agregar_nodo(destino)
         
-        arista = ari.Arista(nodo_origen, nodo_destino, peso, self.dirigido)
+        arista = ari.Arista(nodo_origen, nodo_destino, self.dirigido)
         self.aristas.append(arista)
         
-        nodo_origen.agregar_vecino(nodo_destino, peso)
+        nodo_origen.agregar_vecino(nodo_destino)
         if not self.dirigido:
-            nodo_destino.agregar_vecino(nodo_origen, peso)
+            nodo_destino.agregar_vecino(nodo_origen)
         
         return arista
     
@@ -126,11 +126,11 @@ class Grafo:
         nodo = self.obtener_nodo(valor)
         if not nodo:
             return 0
-            
+        
         if self.dirigido:
             # Para grafos dirigidos, calculamos grado de entrada y salida
             grado_salida = len(nodo.obtener_vecinos())
             grado_entrada = sum(1 for n in self.obtener_nodos() if nodo in n.obtener_vecinos())
-            return (grado_entrada, grado_salida)
+            return ('Entrada='+str(grado_entrada),'Salida='+str( grado_salida))
         else:
             return len(nodo.obtener_vecinos())

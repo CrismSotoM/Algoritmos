@@ -1,5 +1,5 @@
 class Arista:
-    def __init__(self, origen, destino, peso=1, dirigida=False):
+    def __init__(self, origen, destino, dirigida=False):
         """
         Inicializa una arista entre dos nodos.
         
@@ -11,7 +11,6 @@ class Arista:
         """
         self.origen = origen
         self.destino = destino
-        self.peso = peso
         self.dirigida = dirigida
     
     def obtener_nodos(self):
@@ -22,15 +21,6 @@ class Arista:
             Tupla con los nodos (origen, destino)
         """
         return (self.origen, self.destino)
-    
-    def obtener_peso(self):
-        """
-        Devuelve el peso de la arista.
-        
-        Returns:
-            El peso de la arista
-        """
-        return self.peso
     
     def es_dirigida(self):
         """
@@ -49,7 +39,7 @@ class Arista:
             String descriptivo de la arista
         """
         direccion = "->" if self.dirigida else "<->"
-        return f"{self.origen.obtener_valor()} {direccion} {self.destino.obtener_valor()} (peso: {self.peso})"
+        return f"{self.origen.obtener_valor()} {direccion} {self.destino.obtener_valor()}"
     
     def __eq__(self, otra):
         """

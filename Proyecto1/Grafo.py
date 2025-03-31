@@ -1,5 +1,6 @@
 import Arista as ari
 import Nodo as nod
+# import pygame
 class Grafo:
     def __init__(self, dirigido=False):
         """   Inicializa un grafo vacío.
@@ -23,15 +24,14 @@ class Grafo:
             self.nodos[valor] = nod.Nodo(valor)
         return self.nodos[valor]
     
-    def agregar_arista(self, origen, destino, peso=1):
+    def agregar_arista(self, origen, destino):
         """
         Agrega una arista entre dos nodos.
         
         Args:
             origen: Valor del nodo origen
             destino: Valor del nodo destino
-            peso: Peso de la arista (solo para grafos ponderados)
-            
+        
         Returns:
             La arista creada
         """
@@ -134,3 +134,51 @@ class Grafo:
             return ('Entrada='+str(grado_entrada),'Salida='+str( grado_salida))
         else:
             return len(nodo.obtener_vecinos())
+
+    def archivo_grafo(self, valor):
+        """
+        Crea archivo del garfo.
+        
+        Args:
+            valor: Valor nombre del grafo
+            
+        Returns:
+            Archivo extencion valor.dot 
+        """
+        f = open(str(valor+".dot"), "w")
+        f.write(str('graph '+valor+'={\n'))
+        f.write(";\n".join(str(nodo.obtener_valor()) for nodo in self.obtener_nodos()))
+        f.write(";\n")
+        f.write(";\n".join(str(arista) for arista in self.obtener_aristas()))
+        f.write(";\n}")
+        f.close()
+
+    def generar_malla(self,filas,columnas):
+        """
+        Genera un grafo malla con las dimensiones especificadas.
+        Args:
+            filas: numero de filas del grafo
+            columnas: numero de columnas del grafo
+        
+        Returns:
+            Grafo malla
+        """
+        # Crear nodos
+        for i in range(filas):
+            for j in range(columnas):
+                valor_nodo = f"{i}{j}"
+                self.agregar_nodo(valor_nodo)
+        
+        # Conectar nodos horizontalmente
+        for i in range(filas):
+            for j in range(columnas - 1):
+                origen = f"{i}{j}"
+                destino = f"{i}{j+1}"
+                self.agregar_arista(origen, destino)
+        
+        # Conectar nodos verticalmente
+        for i in range(filas - 1):
+            for j in range(columnas):
+                origen = f"{i}{j}"
+                destino = f"{i+1}{j}"
+                self.agregar_arista(origen, destino)

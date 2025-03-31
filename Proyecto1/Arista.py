@@ -38,22 +38,7 @@ class Arista:
         Returns:
             String descriptivo de la arista
         """
-        direccion = "->" if self.dirigida else "<->"
+        direccion = " -- " if self.dirigida else "<->"
         return f"{self.origen.obtener_valor()} {direccion} {self.destino.obtener_valor()}"
     
-    def __eq__(self, otra):
-        """
-        Compara si dos aristas son iguales. 
-        Args:
-            otra: Otra arista a comparar
-        Returns:
-            True si conectan los mismos nodos (en el mismo orden si es dirigida)
-        """
-        if self.dirigida:
-            return (self.origen == otra.origen and 
-                    self.destino == otra.destino)
-        else:
-            return ((self.origen == otra.origen and 
-                    self.destino == otra.destino) or
-                    (self.origen == otra.destino and 
-                    self.destino == otra.origen))
+    

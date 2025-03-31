@@ -38,7 +38,7 @@ class Arista:
         Returns:
             String descriptivo de la arista
         """
-        direccion = " -- " if self.dirigida else "<->"
+        direccion = "->" if self.dirigida else "--"
         return f"{self.origen.obtener_valor()} {direccion} {self.destino.obtener_valor()}"
     
     

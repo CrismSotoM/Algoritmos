@@ -1,5 +1,6 @@
 import Arista as ari
 import Nodo as nod
+from random import *
 # import pygame
 class Grafo:
     def __init__(self, dirigido=False):
@@ -182,3 +183,25 @@ class Grafo:
                 origen = f"{i}{j}"
                 destino = f"{i+1}{j}"
                 self.agregar_arista(origen, destino)
+    
+    
+    def grafoErdosReny(self,nodos,aristas):
+        """
+        Genera un grafo Erdös y Rényi con los nodos especificadas.
+        Args:
+            nodos: numero de nodos del grafo
+            aristas: numero de aristas del grafo
+        
+        Returns:
+            Grafo de Erdös y Rényi
+        """
+        # Crear nodos
+        for i in range(nodos-1):
+            self.agregar_nodo(i)
+        
+        i=0
+        while(i<aristas):
+            origen,destino=randint(0,nodos-1),randint(0,nodos-1)
+            if self.existe_arista(origen,destino)==False and origen != destino:
+                self.agregar_arista(origen,destino)
+                i+=1

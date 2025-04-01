@@ -164,24 +164,20 @@ class Grafo:
         Returns:
             Grafo malla
         """
-        # Crear nodos
-        for i in range(filas):
-            for j in range(columnas):
-                valor_nodo = f"{i}{j}"
-                self.agregar_nodo(valor_nodo)
+        
         
         # Conectar nodos horizontalmente
         for i in range(filas):
             for j in range(columnas - 1):
-                origen = f"{i}{j}"
-                destino = f"{i}{j+1}"
+                origen = f"{i}|{j}"
+                destino = f"{i}|{j+1}"
                 self.agregar_arista(origen, destino)
         
         # Conectar nodos verticalmente
         for i in range(filas - 1):
             for j in range(columnas):
-                origen = f"{i}{j}"
-                destino = f"{i+1}{j}"
+                origen = f"{i}|{j}"
+                destino = f"{i+1}|{j}"
                 self.agregar_arista(origen, destino)
     
     
@@ -196,7 +192,7 @@ class Grafo:
             Grafo de Erdös y Rényi
         """
         # Crear nodos
-        for i in range(nodos-1):
+        for i in range(nodos):
             self.agregar_nodo(i)
         
         i=0

@@ -184,6 +184,7 @@ class Grafo:
     def grafoErdosReny(self,nodos,aristas):
         """
         Genera un grafo Erdös y Rényi con los nodos especificadas.
+        Crea n nodos y elegir uniformemente al azar m distintos pares de distintos aristas
         Args:
             nodos: numero de nodos del grafo
             aristas: numero de aristas del grafo
@@ -205,6 +206,7 @@ class Grafo:
     def grafoGilbert(self,nodos,pro):
         """
             Genera el grafo Gilbert con nodos espesificos y probabilidad de conectarse a otro nodo 
+            Crea n nodos y poner una arista entre cada par independiente y uniformemente con probabilidad pro
             Args:
                 nodos: numero de nodos 
                 pro: la probabilidad de conectarse
@@ -223,7 +225,9 @@ class Grafo:
 
     def grafoSimple(self,nodos,r):
         """
-        Genera el Grafo geográfico simple con nodos espesificos y r 
+        Genera el Grafo geográfico simple con nodos espesificos y r
+        Colocar n nodos en un rectángulo unitario con coordenadas uniformes (o normales) y colocar una arista 
+        entre cada que distancia =< r 
         Args:
             nodos: n cantindad de nodos 
             r : la distacia maxima entre los nodos
@@ -243,3 +247,51 @@ class Grafo:
                 if math.dist([corx1, cory1], [corx2, cory2]) <= r and self.existe_arista(origen,destino)==self.dirigido and cord!=cord2:
                     self.agregar_arista(origen.obtener_valor(),destino.obtener_valor())
 
+    def GrafoDorogovtsevMendes(self,nodos):
+        """
+        Genera el Grafo Dorogovtsev-Mendes con nodos adidcionales
+        Crear 3 nodos y 3 aristas formando un triángulo. 
+        Después, para cada nodo adicional, se selecciona una arista al azar y se 
+        crean aristas entre el nodo nuevo y los extremos de la arista seleccionada
+        Args:
+            nodos: Cantidad de nodos a generar
+        Returns:
+            Grafo de Dorogovtsev-Mendes
+        """
+        A,B,C = "0|0", "10|0", "5|10"
+        self.agregar_arista(A,B)
+        self.agregar_arista(B,C)
+        self.agregar_arista(C,A)
+        CorNodos=[]
+        i=1
+        while i<= nodos:
+            AristaAle=random.choice(self.obtener_aristas())
+            for nodo in AristaAle.obtener_nodos():
+                CorNodos.append(nodo.obtener_valor())
+            newNod=str(random.randint(-20,20))+'|'+str(random.randint(-20,20))
+            self.agregar_arista(newNod,CorNodos[0])
+            self.agregar_arista(newNod,CorNodos[1])
+            CorNodos.pop()
+            CorNodos.pop()
+            i+=1
+        print('Listo')
+
+    def grafoBarabasiAlbert(self,nodos,costomax):
+        """
+        Genera el grafo de Barabási-Albert
+        Colocar n nodos uno por uno, asignando a cada uno d aristas a vértices distintos de tal manera que la probabilidad 
+        de que el vértice nuevo se conecte a un vértice existente costomax es proporcional a la cantidad de aristas
+        Args:
+            nodos : Cantidad de nodos del grafo
+            costomax: numero maximo de aristas por nodo 
+        Returns:
+            Grafo de Barabási-Albert
+        """
+        
+        for valnodo in range(1,nodos+1):
+            self.agregar_nodo(valnodo)
+            for exisN in self.obtener_nodos():
+                if self.grado_nodo(exisN.obtener_valor())<costomax and exisN.obtener_valor()!=valnodo:
+                    Pv=1-((self.grado_nodo(exisN.obtener_valor()))/costomax)
+                    if random.random() < Pv:
+                        self.agregar_arista(exisN.obtener_valor(),valnodo)

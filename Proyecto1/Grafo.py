@@ -269,12 +269,13 @@ class Grafo:
             for nodo in AristaAle.obtener_nodos():
                 CorNodos.append(nodo.obtener_valor())
             newNod=str(random.randint(-20,20))+'|'+str(random.randint(-20,20))
-            self.agregar_arista(newNod,CorNodos[0])
-            self.agregar_arista(newNod,CorNodos[1])
+            if self.existe_arista(newNod,CorNodos[0])==self.dirigido:
+                self.agregar_arista(newNod,CorNodos[0])
+            if self.existe_arista(newNod,CorNodos[1])==self.dirigido:
+                self.agregar_arista(newNod,CorNodos[1])
             CorNodos.pop()
             CorNodos.pop()
             i+=1
-        print('Listo')
 
     def grafoBarabasiAlbert(self,nodos,costomax):
         """

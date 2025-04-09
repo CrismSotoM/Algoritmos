@@ -1,5 +1,6 @@
-import Arista as ari
-import Nodo as nod
+# Proyecto1/Grafo.py
+from Proyecto1 import Arista as ari
+from Proyecto1 import Nodo as nod
 import random  
 import math
 # import pygame

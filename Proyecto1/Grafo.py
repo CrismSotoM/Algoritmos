@@ -206,7 +206,7 @@ class Grafo:
 
     def grafoGilbert(self,nodos,pro):
         """
-            Genera el grafo Gilbert con nodos espesificos y probabilidad de conectarse a otro nodo 
+            Genera el grafo Gilbert con nodos especificos y probabilidad de conectarse a otro nodo 
             Crea n nodos y poner una arista entre cada par independiente y uniformemente con probabilidad pro
             Args:
                 nodos: numero de nodos 

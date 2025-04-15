@@ -6,7 +6,6 @@ class Arista:
         Args:
             origen: Nodo de origen
             destino: Nodo de destino
-            peso: Peso de la arista (por defecto 1 para grafos no ponderados)
             dirigida: Booleano que indica si la arista es dirigida (por defecto False)
         """
         self.origen = origen

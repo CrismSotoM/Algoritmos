@@ -7,12 +7,12 @@ class Nodo:
             valor: El valor que almacenará el nodo (puede ser cualquier tipo de dato).
         """
         self.valor = valor
-        self.vecinos = {}  # Diccionario para almacenar nodos adyacentes y pesos (para grafos ponderados)
+        self.vecinos = {}  # Diccionario para almacenar nodos adyacentes (para grafos ponderados)
     
     def agregar_vecino(self, nodo):
         peso=1
         """
-        Agrega un nodo vecino con un peso opcional.
+        Agrega un nodo vecino.
         
         Args:
             nodo: El nodo vecino a agregar.
@@ -25,7 +25,7 @@ class Nodo:
         Devuelve los nodos vecinos.
         
         Returns:
-            Un diccionario con los nodos vecinos y sus pesos.
+            Un diccionario con los nodos vecinos.
         """
         return self.vecinos
     

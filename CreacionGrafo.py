@@ -1,4 +1,4 @@
-import Proyecto1.Grafo as gr
+import Proyecto.Grafo as gr
 
 grafoMalla = gr.Grafo()
 grafoMalla.generar_malla(filas=8,columnas=8)

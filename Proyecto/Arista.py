@@ -12,7 +12,7 @@ class Arista:
         self.destino = destino
         self.dirigida = dirigida
     
-    def obtener_nodos(self):
+    def ObtenerNodos(self):
         """
         Devuelve los nodos conectados por la arista.
         
@@ -21,7 +21,7 @@ class Arista:
         """
         return (self.origen, self.destino)
     
-    def es_dirigida(self):
+    def EsDirigida(self):
         """
         Indica si la arista es dirigida.
         
@@ -38,6 +38,6 @@ class Arista:
             String descriptivo de la arista
         """
         direccion = "->" if self.dirigida else "--"
-        return f"{self.origen.obtener_valor()} {direccion} {self.destino.obtener_valor()}"
+        return f"{self.origen.ObtenerValor()} {direccion} {self.destino.ObtenerValor()}"
     
     

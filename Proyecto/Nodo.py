@@ -9,7 +9,7 @@ class Nodo:
         self.valor = valor
         self.vecinos = {}  # Diccionario para almacenar nodos adyacentes (para grafos ponderados)
     
-    def agregar_vecino(self, nodo):
+    def AgregarVecino(self, nodo):
         peso=1
         """
         Agrega un nodo vecino.
@@ -20,7 +20,7 @@ class Nodo:
         """
         self.vecinos[nodo] = peso
     
-    def obtener_vecinos(self):
+    def ObtenerVecinos(self):
         """
         Devuelve los nodos vecinos.
         
@@ -29,7 +29,7 @@ class Nodo:
         """
         return self.vecinos
     
-    def obtener_valor(self):
+    def ObtenerValor(self):
         """
         Devuelve el valor almacenado en el nodo.
         
@@ -45,5 +45,5 @@ class Nodo:
         Returns:
             String que muestra el valor del nodo y sus vecinos.
         """
-        vecinos_str = ", ".join([f"{n.obtener_valor()}" for n in self.vecinos.items()])
+        vecinos_str = ", ".join([f"{n.ObtenerValor()}" for n in self.vecinos.items()])
         return f"Nodo({self.valor}) -> [{vecinos_str}]"

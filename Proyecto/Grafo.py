@@ -11,7 +11,7 @@ class Grafo:
         dirigido: Booleano que indica si el grafo es dirigido (por defecto False)"""
         self.nodos = {}  # Diccionario de nodos {valor: nodo}
         self.aristas = []  # Lista de aristas
-        self.dirigido = dirigido
+        self.dirigido = dirigido  # Indica si el grafo es dirigido o no
 
     def AgregarNodo(self, valor):
         """
@@ -311,7 +311,7 @@ class Grafo:
         
         nodo_inicio = self.ObtenerNodo(inicio)
         if not nodo_inicio:
-            return []
+            return arbolBFS
         
         # Estructuras para BFS
         visitados = set()
@@ -383,43 +383,10 @@ class Grafo:
             if valor_actual not in visitados and nodo_actual not in ArbolDfsI.ObtenerNodos():
                 ArbolDfsI.AgregarNodo(valor_actual)
                 visitados.add(valor_actual)
-                for vecino in (nodo_actual.ObtenerVecinos()):
+                for vecino in reversed(nodo_actual.ObtenerVecinos()):
                     valor_vecino = vecino.ObtenerValor()
                     if valor_vecino not in visitados and vecino not in pila:
                         ArbolDfsI.AgregarNodo(valor_vecino)
                         pila.append(vecino)
                         ArbolDfsI.AgregarArista(valor_actual, valor_vecino)
         return ArbolDfsI
-
-        """
-        Búsqueda a profundidad iterativa que construye el árbol DFS.
-        
-        Args:
-            grafo: Objeto de la clase Grafo
-            inicio: Valor del nodo inicial
-        Returns:
-            Grafo que representa el árbol DFS construido
-        """
-        visitados = set()
-        pila = []
-        ArbolDfsI = Grafo()
-        for nodo in self.ObtenerNodos():
-            if nodo.ObtenerValor() not in visitados:
-                pila.append(nodo)
-                while pila:
-                    nodo_actual = pila.pop()
-                    valor_actual = nodo_actual.ObtenerValor()
-
-                    if valor_actual not in visitados:
-                        visitados.add(valor_actual)
-
-                        for vecino in (nodo_actual.ObtenerVecinos()):
-                            valor_vecino = vecino.ObtenerValor()
-                            if valor_vecino not in visitados:
-                                pila.append(vecino)
-                                ArbolDfsI.AgregarNodo(valor_vecino)
-                                ArbolDfsI.AgregarArista(valor_actual, valor_vecino)
-        return ArbolDfsI
-
-
-

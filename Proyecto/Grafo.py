@@ -341,7 +341,7 @@ class Grafo:
         '''
         nodo_inicio = self.ObtenerNodo(inicio)
         if not nodo_inicio:
-            return []
+            return Grafo()
         
         visitados = set()
         ArbolDfsR = Grafo()

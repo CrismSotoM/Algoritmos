@@ -1,75 +1,46 @@
-import Proyecto1.Grafo as gr
-
-grafoMalla = gr.Grafo()
-grafoMalla.generar_malla(filas=8,columnas=8)
-grafoMalla.archivo_grafo('GrafoMalla50')
-
-grafoMalla = gr.Grafo()
-grafoMalla.generar_malla(filas=15,columnas=15)
-grafoMalla.archivo_grafo('GrafoMalla200')
-
-grafoMalla = gr.Grafo()
-grafoMalla.generar_malla(filas=25,columnas=25)
-grafoMalla.archivo_grafo('GrafoMalla500')
-
-grafoErdosReny= gr.Grafo()
-grafoErdosReny.grafoErdosReny(nodos=50,aristas=150)
-grafoErdosReny.archivo_grafo('ErdosReny50')
-
-grafoErdosReny= gr.Grafo()
-grafoErdosReny.grafoErdosReny(nodos=300,aristas=900)
-grafoErdosReny.archivo_grafo('ErdosReny300')
-
-grafoErdosReny= gr.Grafo()
-grafoErdosReny.grafoErdosReny(nodos=500,aristas=1500)
-grafoErdosReny.archivo_grafo('ErdosReny500')
-    
-grafoGilbert = gr.Grafo()
-grafoGilbert.grafoGilbert(50,0.25)
-grafoGilbert.archivo_grafo('grafoGilbert50')
+import time
+import Proyecto.Grafo as gr
 
 
-grafoGilbert = gr.Grafo()
-grafoGilbert.grafoGilbert(200,0.05)
-grafoGilbert.archivo_grafo('grafoGilbert200')
+print('Creacion de grafos Gilbert', time.strftime("%H:%M:%S"))
+grafoGilbert30=gr.Grafo()
+grafoGilbert30.GrafoGilbert(nodos=30,pro=0.1)
+grafoGilbert30.ArchivoGrafo('GrafoGilbert30')
 
-grafoGilbert = gr.Grafo()
-grafoGilbert.grafoGilbert(500,0.01)
-grafoGilbert.archivo_grafo('grafoGilbert500')
+arbolBFSGilbert30 = grafoGilbert30.BFS(inicio="1")
+arbolBFSGilbert30.ArchivoGrafo('ArbolBfsGilbert30')
+
+arbolDfsInteGilbert30 = grafoGilbert30.DfsIte(inicio="1")
+arbolDfsInteGilbert30.ArchivoGrafo('arbolDfsInteGilbert30')
+
+arbolDfsRecGilbert30 = grafoGilbert30.DfsR(inicio="1")
+arbolDfsRecGilbert30.ArchivoGrafo('arbolDfsRecGilbert30')
 
 
-grafoSimple=gr.Grafo()
-grafoSimple.grafoSimple(nodos=50,r=10)
-grafoSimple.archivo_grafo('grafoSimple50')
+grafoGilbert100=gr.Grafo()
+grafoGilbert100.GrafoGilbert(nodos=100,pro=0.1)
+grafoGilbert100.ArchivoGrafo('GrafoGilbert100')
 
-grafoSimple=gr.Grafo()
-grafoSimple.grafoSimple(nodos=200,r=20)
-grafoSimple.archivo_grafo('grafoSimple200')
+arbolBFSGilbert100 = grafoGilbert100.BFS(inicio="1")
+arbolBFSGilbert100.ArchivoGrafo('ArbolBfsGilbert100')
 
-grafoSimple=gr.Grafo()
-grafoSimple.grafoSimple(nodos=500,r=30)
-grafoSimple.archivo_grafo('grafoSimple500')
+arbolDfsInteGilbert100 = grafoGilbert100.DfsIte(inicio="1")
+arbolDfsInteGilbert100.ArchivoGrafo('arbolDfsInteGilbert100')
 
-grafoDoroMendes=gr.Grafo()
-grafoDoroMendes.GrafoDorogovtsevMendes(50)
-grafoDoroMendes.archivo_grafo('grafoDoroMendes50')
+arbolDfsRecGilbert100 = grafoGilbert100.DfsR(inicio="1")
+arbolDfsRecGilbert100.ArchivoGrafo('arbolDfsRecGilbert100')
 
-grafoDoroMendes=gr.Grafo()
-grafoDoroMendes.GrafoDorogovtsevMendes(200)
-grafoDoroMendes.archivo_grafo('grafoDoroMendes200')
+grafoGilbert500=gr.Grafo()
+grafoGilbert500.GrafoGilbert(nodos=500,pro=0.1)
+grafoGilbert500.ArchivoGrafo('GrafoGilbert500')
 
-grafoDoroMendes=gr.Grafo()
-grafoDoroMendes.GrafoDorogovtsevMendes(500)
-grafoDoroMendes.archivo_grafo('grafoDoroMendes500')
+arbolBFSGilbert500 = grafoGilbert500.BFS(inicio="1")
+arbolBFSGilbert500.ArchivoGrafo('ArbolBfsGilbert500')
 
-grafoGusano=gr.Grafo()
-grafoGusano.grafoBarabasiAlbert(50,3)
-grafoGusano.archivo_grafo('Gusano50')
+arbolDfsInteGilbert500 = grafoGilbert500.DfsIte(inicio="1")
+arbolDfsInteGilbert500.ArchivoGrafo('arbolDfsInteGilbert500')
 
-grafoGusano=gr.Grafo()
-grafoGusano.grafoBarabasiAlbert(200,5)
-grafoGusano.archivo_grafo('Gusano200')
+arbolDfsRecGilbert500 = grafoGilbert500.DfsR(inicio="1")
+arbolDfsRecGilbert500.ArchivoGrafo('arbolDfsRecGilbert500')
 
-grafoGusano=gr.Grafo()
-grafoGusano.grafoBarabasiAlbert(500,7)
-grafoGusano.archivo_grafo('Gusano500')
+print('termino de crear grafos Gilbert', time.strftime("%H:%M:%S"))

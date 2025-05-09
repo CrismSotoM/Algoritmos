@@ -50,6 +50,56 @@ class Grafo:
         
         return arista
 
+    def ObtenerArista(self, origen, destino):
+        """
+        Obtiene una arista entre dos nodos.
+        
+        Args:
+            origen: Valor del nodo origen
+            destino: Valor del nodo destino
+            
+        Returns:
+            La arista si existe, None si no existe
+        """
+        nodo_origen = self.ObtenerNodo(origen)
+        nodo_destino = self.ObtenerNodo(destino)
+        
+        if not nodo_origen or not nodo_destino:
+            return None
+        
+        arista = ari.Arista(nodo_origen, nodo_destino, self.dirigido)
+        
+        if arista in self.aristas:
+            return arista
+        return None
+
+    def EliminarArista(self, origen, destino):
+        """
+        Elimina una arista entre dos nodos.
+        
+        Args:
+            origen: Valor del nodo origen
+            destino: Valor del nodo destino
+            
+        Returns:
+            True si se eliminó la arista, False si no existía
+        """
+        nodo_origen = self.ObtenerNodo(origen)
+        nodo_destino = self.ObtenerNodo(destino)
+        
+        if not nodo_origen or not nodo_destino:
+            return False
+        
+        arista = ari.Arista(nodo_origen, nodo_destino, self.dirigido)
+        
+        if arista in self.aristas:
+            self.aristas.remove(arista)
+            nodo_origen.EliminarVecino(nodo_destino)
+            if not self.dirigido:
+                nodo_destino.EliminarVecino(nodo_origen)
+            return True
+        return False
+
     def ObtenerNodo(self, valor):
         """
         Obtiene un nodo por su valor.
@@ -171,15 +221,15 @@ class Grafo:
         # Conectar nodos horizontalmente
         for i in range(filas):
             for j in range(columnas - 1):
-                origen = f"{i}_{j}"
-                destino = f"{i}_{j+1}"
+                origen = f"{i}|{j}"
+                destino = f"{i}|{j+1}"
                 self.AgregarArista(origen, destino)
         
         # Conectar nodos verticalmente
         for i in range(filas - 1):
             for j in range(columnas):
-                origen = f"{i}_{j}"
-                destino = f"{i+1}_{j}"
+                origen = f"{i}|{j}"
+                destino = f"{i+1}|{j}"
                 self.AgregarArista(origen, destino)
 
     def GrafoErdosReny(self,nodos,aristas):
@@ -264,8 +314,8 @@ class Grafo:
         self.AgregarArista(B,C)
         self.AgregarArista(C,A)
         CorNodos=[]
-        i=1
-        while i<= nodos:
+        i=3
+        while i< nodos:
             AristaAle=random.choice(self.ObtenerAristas())
             for nodo in AristaAle.ObtenerNodos():
                 CorNodos.append(nodo.ObtenerValor())
@@ -301,7 +351,7 @@ class Grafo:
     def BFS(self, inicio):
         """
         Busqueda a lo ancho 
-        Explorar desde s y hacia fuera en todas las direcciones posibles, 
+        Explorar desde Inicio y hacia fuera en todas las direcciones posibles, 
         añadiendo nodos una “capa” a la vez
         
         Args:
@@ -390,3 +440,48 @@ class Grafo:
                         pila.append(vecino)
                         ArbolDfsI.AgregarArista(valor_actual, valor_vecino)
         return ArbolDfsI
+
+    def Dijkstra(self, inicio):
+        """
+        Algoritmo de Dijkstra para encontrar el árbol de caminos más cortos desde un nodo inicial.
+        
+        Args:
+            inicio: Valor del nodo inicial
+            
+        Returns:
+            Un objeto de la clase Grafo que representa el árbol de caminos más cortos
+        """
+        nodo_inicio = self.ObtenerNodo(inicio)
+        if not nodo_inicio:
+            return Grafo()
+
+        # Inicializar estructuras
+        distancias = {nodo.ObtenerValor(): float('inf') for nodo in self.ObtenerNodos()}
+        distancias[inicio] = 0
+        visitados = set()
+        cola_prioridad = [(0, nodo_inicio)]  # (distancia, nodo)
+        arbol_dijkstra = Grafo()
+        arbol_dijkstra.AgregarNodo(inicio)
+
+        while cola_prioridad:
+            distancia_actual, nodo_actual = cola_prioridad.pop(0)
+            valor_actual = nodo_actual.ObtenerValor()
+
+            if valor_actual in visitados:
+                continue
+
+            visitados.add(valor_actual)
+
+            for vecino in nodo_actual.ObtenerVecinos():
+                valor_vecino = vecino.ObtenerValor()
+                nueva_distancia = distancia_actual + 1  # Suponiendo peso 1 para las aristas
+
+                if nueva_distancia < distancias[valor_vecino]:
+                    distancias[valor_vecino] = nueva_distancia
+                    cola_prioridad.append((nueva_distancia, vecino))
+                    cola_prioridad.sort(key=lambda x: x[0])  # Ordenar por distancia
+                    # Agregar nodo y arista al árbol de caminos más cortos
+                    arbol_dijkstra.AgregarNodo(valor_vecino)
+                    arbol_dijkstra.AgregarArista(valor_actual, valor_vecino)
+
+        return arbol_dijkstra

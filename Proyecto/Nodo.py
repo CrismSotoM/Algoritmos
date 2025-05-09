@@ -19,7 +19,17 @@ class Nodo:
             peso: El peso de la arista (por cada conexion se agrega 1).
         """
         self.vecinos[nodo] = peso
-    
+
+    def EliminarVecino(self, nodo):
+        """
+        Elimina un nodo vecino.
+        
+        Args:
+            nodo: El nodo vecino a eliminar.
+        """
+        if nodo in self.vecinos:
+            del self.vecinos[nodo]
+
     def ObtenerVecinos(self):
         """
         Devuelve los nodos vecinos.

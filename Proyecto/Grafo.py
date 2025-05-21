@@ -188,7 +188,7 @@ class Grafo:
         else:
             return len(nodo.ObtenerVecinos())
 
-    def ArchivoGrafo(self, valor):
+    def ArchivoGrafo(self, valor, distancias=None):
         """
         Crea archivo del garfo.
         
@@ -200,8 +200,13 @@ class Grafo:
         """
         f = open(str(valor+".dot"), "w")
         f.write(str('graph '+valor+'={\n'))
-        f.write(";\n".join(str(nodo.ObtenerValor()) for nodo in self.ObtenerNodos()))
-        f.write(";\n")
+        if distancias is not None:
+            for nodo in self.ObtenerNodos():
+                # "1" [label="Raiz 1"];
+                f.write(f"\"{nodo.ObtenerValor()}\" "+str(distancias[nodo.ObtenerValor()])+"\n")
+        else:
+            f.write(";\n".join(str(nodo.ObtenerValor()) for nodo in self.ObtenerNodos()))
+            f.write(";\n")
         f.write(";\n".join(str(arista) for arista in self.ObtenerAristas()))
         f.write(";\n}")
         f.close()
@@ -454,7 +459,6 @@ class Grafo:
         nodo_inicio = self.ObtenerNodo(inicio)
         if not nodo_inicio:
             return Grafo()
-
         # Inicializar estructuras
         distancias = {nodo.ObtenerValor(): float('inf') for nodo in self.ObtenerNodos()}
         distancias[inicio] = 0
@@ -462,20 +466,15 @@ class Grafo:
         cola_prioridad = [(0, nodo_inicio)]  # (distancia, nodo)
         arbol_dijkstra = Grafo()
         arbol_dijkstra.AgregarNodo(inicio)
-
         while cola_prioridad:
             distancia_actual, nodo_actual = cola_prioridad.pop(0)
             valor_actual = nodo_actual.ObtenerValor()
-
             if valor_actual in visitados:
                 continue
-
             visitados.add(valor_actual)
-
             for vecino in nodo_actual.ObtenerVecinos():
                 valor_vecino = vecino.ObtenerValor()
                 nueva_distancia = distancia_actual + 1  # Suponiendo peso 1 para las aristas
-
                 if nueva_distancia < distancias[valor_vecino]:
                     distancias[valor_vecino] = nueva_distancia
                     cola_prioridad.append((nueva_distancia, vecino))
@@ -483,5 +482,9 @@ class Grafo:
                     # Agregar nodo y arista al árbol de caminos más cortos
                     arbol_dijkstra.AgregarNodo(valor_vecino)
                     arbol_dijkstra.AgregarArista(valor_actual, valor_vecino)
-
-        return arbol_dijkstra
+        # Crear un diccionario de distancias para cada nodo y su respectivo valor de distancia
+        strdistancias ={}
+        for nodo, distancia in distancias.items():
+            strdistancias[nodo] = f"[label=\"{inicio}_({distancia})\"];"
+        
+        return arbol_dijkstra, strdistancias

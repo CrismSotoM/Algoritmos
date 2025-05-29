@@ -67,10 +67,9 @@ class Grafo:
         if not nodo_origen or not nodo_destino:
             return None
         
-        arista = ari.Arista(nodo_origen, nodo_destino, self.dirigido)
-        
-        if arista in self.aristas:
-            return arista
+        for arista in self.aristas:
+            if arista.ObtenerNodos()[0] == nodo_origen and arista.ObtenerNodos()[1] == nodo_destino:
+                return arista
         return None
 
     def EliminarArista(self, origen, destino):
@@ -90,7 +89,7 @@ class Grafo:
         if not nodo_origen or not nodo_destino:
             return False
         
-        arista = ari.Arista(nodo_origen, nodo_destino, self.dirigido)
+        arista = self.ObtenerArista(origen, destino)
         
         if arista in self.aristas:
             self.aristas.remove(arista)
@@ -210,6 +209,20 @@ class Grafo:
         f.write(";\n".join(str(arista) for arista in self.ObtenerAristas()))
         f.write(";\n}")
         f.close()
+
+    def Copia(self):
+        """
+        Crea una copia del grafo actual.
+        
+        Returns:
+            Un nuevo objeto Grafo con los mismos nodos y aristas
+        """
+        nuevo_grafo = Grafo(self.dirigido)
+        for nodo in self.ObtenerNodos():
+            nuevo_grafo.AgregarNodo(nodo.ObtenerValor())
+        for arista in self.ObtenerAristas():
+            nuevo_grafo.AgregarArista(arista.ObtenerNodos()[0].ObtenerValor(),arista.ObtenerNodos()[1].ObtenerValor())
+        return nuevo_grafo     
 
     def GrafoMalla(self,filas,columnas):
         """
@@ -488,3 +501,102 @@ class Grafo:
             strdistancias[nodo] = f"[label=\"{inicio}_({distancia})\"];"
         
         return arbol_dijkstra, strdistancias
+
+    def Kruskal(self):
+        """
+        Algoritmo de Kruskal para encontrar el árbol de expansión mínima.
+        
+        Returns:
+            Un objeto de la clase Grafo que representa el árbol de expansión mínima
+        """
+        arbol_kruskal = Grafo(self.dirigido)
+        # Ordenar las aristas por peso (aquí asumimos peso 1 para todas las aristas)
+        aristas_ordenadas = sorted(self.aristas, key=lambda x: 1)
+        # Inicializar conjuntos disjuntos para cada nodo
+        conjuntos = {nodo.ObtenerValor(): {nodo.ObtenerValor()} for nodo in self.ObtenerNodos()}
+        for arista in aristas_ordenadas:
+            origen = arista.ObtenerNodos()[0].ObtenerValor()
+            destino = arista.ObtenerNodos()[1].ObtenerValor()
+            # Verificar si los nodos de la arista están en conjuntos diferentes
+            if conjuntos[origen] != conjuntos[destino]:
+                # Unir los conjuntos
+                conjunto_unido = conjuntos[origen].union(conjuntos[destino])
+                for nodo in conjunto_unido:
+                    conjuntos[nodo] = conjunto_unido
+                # Agregar la arista al árbol de expansión mínima
+                arbol_kruskal.AgregarArista(origen, destino)
+        return arbol_kruskal
+
+    def KruskalInverso(self):
+        """
+        Algoritmo de Kruskal inverso (Reverse-Delete) para encontrar el árbol de expansión mínima.
+        Elimina aristas de mayor a menor peso, manteniendo el grafo conectado.
+        Returns:
+            Un objeto de la clase Grafo que representa el árbol de expansión mínima
+        """
+        # Copia del grafo original
+        arbol = self.Copia()
+        # Ordenar aristas de mayor a menor peso (peso 1, así que solo invierte)
+        aristas_ordenadas = sorted(arbol.ObtenerAristas(), key=lambda x: 1,reverse=True)
+        # Recorrer las aristas en orden descendente
+        for arista in aristas_ordenadas:
+            origen = arista.ObtenerNodos()[0].ObtenerValor()
+            destino = arista.ObtenerNodos()[1].ObtenerValor()
+            # Eliminar la arista
+            arbol.EliminarArista(origen, destino)
+            # Verificar si el grafo sigue conectado
+            if not arbol.Conectado():
+                # Si se desconecta, volver a agregar la arista
+                arbol.AgregarArista(origen, destino)
+        return arbol
+
+    def Conectado(self):
+        """
+        Verifica si el grafo esta conectado con todos los nodos  usando BFS.
+        Returns:
+            True si esta conectado , False no estan todos los nodos.
+        """
+        nodos = self.ObtenerNodos()
+        if not nodos:
+            return "El grafo está vacío"
+        arbolBfs = self.BFS(nodos[0].ObtenerValor())
+        
+        if len(nodos) != len(arbolBfs.ObtenerNodos()):
+            return False
+        else:
+            return True
+
+    def Prim(self):
+        """
+        Algoritmo de Prim para encontrar el árbol de expansión mínima.
+
+        Returns:
+            Un objeto de la clase Grafo que representa el árbol de expansión mínima
+        """
+        arbol_prim = Grafo(self.dirigido)
+        nodos = self.ObtenerNodos()
+        if not nodos:
+            return arbol_prim
+        visitados = set()
+        cola_prioridad = []
+        # Comenzar desde un nodo arbitrario
+        nodo_inicio = nodos[0]
+        visitados.add(nodo_inicio.ObtenerValor())
+        arbol_prim.AgregarNodo(nodo_inicio.ObtenerValor())
+        # Agregar vecinos del nodo inicial a la cola de prioridad
+        for vecino in nodo_inicio.ObtenerVecinos():
+            cola_prioridad.append((1, nodo_inicio, vecino))  # (peso, origen, destino)
+        # Mientras haya nodos en la cola de prioridad
+        while cola_prioridad:
+            # Ordenar la cola por peso (aunque todos son 1, por si acaso)
+            cola_prioridad.sort(key=lambda x: x[0])
+            peso, origen, destino = cola_prioridad.pop(0)
+            valor_destino = destino.ObtenerValor()
+            if valor_destino not in visitados:
+                visitados.add(valor_destino)
+                arbol_prim.AgregarNodo(valor_destino)
+                arbol_prim.AgregarArista(origen.ObtenerValor(), valor_destino)
+                for vecino in destino.ObtenerVecinos():
+                    if vecino.ObtenerValor() not in visitados:
+                        cola_prioridad.append((1, destino, vecino))
+        return arbol_prim

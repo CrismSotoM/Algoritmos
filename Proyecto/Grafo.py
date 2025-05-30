@@ -283,7 +283,7 @@ class Grafo:
                 Grafo Gilbert 
         """
         for i in range(nodos):
-            self.AgregarNodo(i)
+            self.AgregarNodo(f"{i}")
         
         for i in range(nodos):
             origen = f"{i}"

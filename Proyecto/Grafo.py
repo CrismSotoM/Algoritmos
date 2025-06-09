@@ -3,7 +3,7 @@ from Proyecto import Nodo as nod
 from collections import deque
 import random  
 import math
-# import pygame
+import pygame
 class Grafo:
     def __init__(self, dirigido=False):
         """   Inicializa un grafo vacío.
@@ -197,7 +197,7 @@ class Grafo:
         Returns:
             Archivo extencion valor.dot 
         """
-        f = open(str(valor+".dot"), "w")
+        f = open(str('C:/Users/crist/OneDrive/Documentos/practicapythn/Algoritmos/ArchivosGphi/DOT/'+valor+".dot"), "w")
         f.write(str('graph '+valor+'={\n'))
         if distancias is not None:
             for nodo in self.ObtenerNodos():
@@ -338,10 +338,8 @@ class Grafo:
             for nodo in AristaAle.ObtenerNodos():
                 CorNodos.append(nodo.ObtenerValor())
             newNod=str(random.randint(-20,20))+'|'+str(random.randint(-20,20))
-            if self.ExisteArista(newNod,CorNodos[0])==self.dirigido:
-                self.AgregarArista(newNod,CorNodos[0])
-            if self.ExisteArista(newNod,CorNodos[1])==self.dirigido:
-                self.AgregarArista(newNod,CorNodos[1])
+            self.AgregarArista(newNod,CorNodos[0])
+            self.AgregarArista(newNod,CorNodos[1])
             CorNodos.pop()
             CorNodos.pop()
             i+=1

@@ -8,6 +8,7 @@ class Nodo:
         """
         self.valor = valor
         self.vecinos = {}  # Diccionario para almacenar nodos adyacentes (para grafos ponderados)
+        self.attrs = dict()
     
     def AgregarVecino(self, nodo):
         peso=1

@@ -3,25 +3,24 @@ import pygame
 import random
 
 # create the main surface (or window)
-WIDTH, HEIGHT   = 1920, 1080
-BORDER          = 5
+WIDTH, HEIGHT   = 1020, 720
+BORDER          = 10
 WIN             = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # colors
-BG              = (251, 241, 199)
-BLUE            = (69, 133, 136)
-BLACK           = (40, 40, 40)
-RED             = (157, 0, 6)
+BG    = (255, 255, 255)
+BLUE  = (69, 133, 136)
+BLACK = (40, 40, 40)
 
 # configuration
-ITERS           = 1000
-FPS             = 60
-NODE_RADIUS     = 5
+ITERS           = 10000
+FPS             = 90
+NODE_RADIUS     = 3
 DIST_MIN        = (min(WIDTH, HEIGHT)) // 35
-NODE_MIN_WIDTH  = 10
-NODE_MIN_HEIGHT = 10
-NODE_MAX_WIDTH  = WIDTH - 10
-NODE_MAX_HEIGHT = HEIGHT - 10
+NODE_MIN_WIDTH  = 5
+NODE_MIN_HEIGHT = 5
+NODE_MAX_WIDTH  = WIDTH - 5
+NODE_MAX_HEIGHT = HEIGHT - 5
 
 # spring constants
 c1 = 1.65
@@ -152,7 +151,7 @@ def draw_nodes(g):
 
     for node in g.ObtenerNodos():
         pygame.draw.circle(WIN, BLUE, node.attrs['coords'], NODE_RADIUS - 3, 0)
-        pygame.draw.circle(WIN, RED, node.attrs['coords'], NODE_RADIUS, 3)
+        pygame.draw.circle(WIN, BLUE, node.attrs['coords'], NODE_RADIUS, 3)
 
     return
 

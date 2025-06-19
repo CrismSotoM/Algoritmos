@@ -1,4 +1,4 @@
-from math import log, atan2, cos, sin
+from math import log, atan2, cos, sin, sqrt
 import pygame
 import random
 
@@ -13,7 +13,7 @@ BLUE  = (69, 133, 136)
 BLACK = (40, 40, 40)
 
 # configuration
-ITERS           = 10000
+ITERS           = 500
 FPS             = 90
 NODE_RADIUS     = 3
 DIST_MIN        = (min(WIDTH, HEIGHT)) // 35
@@ -81,6 +81,7 @@ def init_nodes(g):
         x = random.randrange(NODE_MIN_WIDTH, NODE_MAX_WIDTH)
         y = random.randrange(NODE_MIN_HEIGHT, NODE_MAX_HEIGHT)
         node.attrs['coords'] = [x, y]
+        node.attrs['disp'] = [0.0,0.0]
 
     return
 
@@ -174,3 +175,89 @@ def draw_edges(g):
         pygame.draw.line(WIN, BLACK, u_pos, v_pos, 1)
 
     return
+
+def fruchterman_reginold(g):
+    """
+    Muestra una animación del metodo de visualizacion de Furchterman y Reginold
+    Parametros
+    ----------
+    g : Grafo
+        grafo para el cual se realiza la visualizacion
+    """
+    run = True
+    clock = pygame.time.Clock()
+    area = (NODE_MAX_WIDTH - NODE_MIN_WIDTH) * (NODE_MAX_HEIGHT - NODE_MIN_HEIGHT)
+    k = sqrt(area / len(g.ObtenerNodos())) * 0.5
+
+    t = min(WIDTH, HEIGHT) / 10  # temperatura inicial
+    i=0
+
+    init_nodes(g)
+    draw_edges(g)
+    draw_nodes(g)
+
+    i = 0
+    while run:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+        if i > ITERS:
+            False
+
+        WIN.fill(BG)
+        update_nodesfruchterman_reginold(g, t, k)
+        draw_edges(g)
+        draw_nodes(g)
+        pygame.display.update()
+        t *= 0.995  # enfriar temperatura
+        i += 1
+
+    pygame.quit()
+    return
+
+def update_nodesfruchterman_reginold(g,t,k):
+    """
+    Aplica el algoritmo de Fruchterman-Reingold para actualizar las posiciones.
+    """
+    for v in g.ObtenerNodos():
+        v.attrs['disp'] = [0.0, 0.0]
+
+    for v in g.ObtenerNodos():
+        for u in g.ObtenerNodos():
+            if v == u:
+                continue
+            delta = [v.attrs['coords'][0] - u.attrs['coords'][0], v.attrs['coords'][1] - u.attrs['coords'][1]]
+            dist = distancia(v.attrs['coords'], u.attrs['coords'])
+            fuerza = k * k / max(dist, 0.1)
+            v.attrs['disp'][0] += delta[0] / dist * fuerza
+            v.attrs['disp'][1] += delta[1] / dist * fuerza
+
+    for arista in g.ObtenerAristas():
+        u, v = arista.ObtenerNodos()
+        delta = [v.attrs['coords'][0] - u.attrs['coords'][0], v.attrs['coords'][1] - u.attrs['coords'][1]]
+        dist = distancia(u.attrs['coords'], v.attrs['coords'])
+        fuerza = dist * dist / k
+        u.attrs['disp'][0] += delta[0] / dist * fuerza
+        u.attrs['disp'][1] += delta[1] / dist * fuerza
+        v.attrs['disp'][0] -= delta[0] / dist * fuerza
+        v.attrs['disp'][1] -= delta[1] / dist * fuerza
+
+    for nodo in g.ObtenerNodos():
+        dx, dy = nodo.attrs['disp']
+        x, y = nodo.attrs['coords']
+        max_disp = min(t, 10)
+        dx = max(-max_disp, min(max_disp, dx))
+        dy = max(-max_disp, min(max_disp, dy))
+        x += dx + (WIDTH / 2 - x) * t * 0.001
+        y += dy + (HEIGHT / 2 - y) * t * 0.001
+        x = max(20, min(WIDTH - 20, x))
+        y = max(20, min(HEIGHT - 20, y))
+        nodo.attrs['coords'] = [x, y]
+
+def distancia(p1, p2):
+    dx = p1[0] - p2[0]
+    dy = p1[1] - p2[1]
+    return sqrt(dx**2 + dy**2) + 0.01
+
+

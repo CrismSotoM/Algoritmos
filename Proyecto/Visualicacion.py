@@ -9,14 +9,13 @@ WIN             = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # colors
 BG    = (255, 255, 255)
-BLUE  = (69, 133, 136)
 BLACK = (40, 40, 40)
 
 # configuration
 ITERS           = 500
 FPS             = 90
 NODE_RADIUS     = 3
-DIST_MIN        = (min(WIDTH, HEIGHT)) // 35
+DIST_MIN        = (min(WIDTH, HEIGHT)) // 30
 NODE_MIN_WIDTH  = 5
 NODE_MIN_HEIGHT = 5
 NODE_MAX_WIDTH  = WIDTH - 5
@@ -27,7 +26,10 @@ c1 = 1.65
 c2 = 0.9
 c3 = 0.4
 c4 = 0.6
-
+x=random.randint(0,150)
+y=random.randint(0,150)
+z=random.randint(0,150)
+colorRam=(x,y,z)
 
 def spring(g):
     """
@@ -149,10 +151,10 @@ def draw_nodes(g):
     g : Grafo
         grafo para el cual se realiza la visualizacion
     """
-
+    
     for node in g.ObtenerNodos():
-        pygame.draw.circle(WIN, BLUE, node.attrs['coords'], NODE_RADIUS - 3, 0)
-        pygame.draw.circle(WIN, BLUE, node.attrs['coords'], NODE_RADIUS, 3)
+        pygame.draw.circle(WIN, colorRam, node.attrs['coords'], NODE_RADIUS - 3, 0)
+        pygame.draw.circle(WIN, colorRam, node.attrs['coords'], NODE_RADIUS, 3)
 
     return
 
@@ -176,7 +178,7 @@ def draw_edges(g):
 
     return
 
-def fruchterman_reginold(g):
+def fruchterman_reginold(g,fuerza=0.3):
     """
     Muestra una animación del metodo de visualizacion de Furchterman y Reginold
     Parametros
@@ -187,8 +189,7 @@ def fruchterman_reginold(g):
     run = True
     clock = pygame.time.Clock()
     area = (NODE_MAX_WIDTH - NODE_MIN_WIDTH) * (NODE_MAX_HEIGHT - NODE_MIN_HEIGHT)
-    k = sqrt(area / len(g.ObtenerNodos())) * 0.5
-
+    k = sqrt(area / len(g.ObtenerNodos())) * fuerza # constante de fuerza
     t = min(WIDTH, HEIGHT) / 10  # temperatura inicial
     i=0
 
@@ -229,6 +230,8 @@ def update_nodesfruchterman_reginold(g,t,k):
                 continue
             delta = [v.attrs['coords'][0] - u.attrs['coords'][0], v.attrs['coords'][1] - u.attrs['coords'][1]]
             dist = distancia(v.attrs['coords'], u.attrs['coords'])
+            if dist < DIST_MIN:
+                dist = DIST_MIN
             fuerza = k * k / max(dist, 0.1)
             v.attrs['disp'][0] += delta[0] / dist * fuerza
             v.attrs['disp'][1] += delta[1] / dist * fuerza
@@ -237,6 +240,8 @@ def update_nodesfruchterman_reginold(g,t,k):
         u, v = arista.ObtenerNodos()
         delta = [v.attrs['coords'][0] - u.attrs['coords'][0], v.attrs['coords'][1] - u.attrs['coords'][1]]
         dist = distancia(u.attrs['coords'], v.attrs['coords'])
+        if dist < DIST_MIN:
+                dist = DIST_MIN
         fuerza = dist * dist / k
         u.attrs['disp'][0] += delta[0] / dist * fuerza
         u.attrs['disp'][1] += delta[1] / dist * fuerza

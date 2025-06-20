@@ -178,7 +178,7 @@ def draw_edges(g):
 
     return
 
-def fruchterman_reginold(g,fuerza=0.3):
+def fruchterman_reginold(g,fuerza=0.3,ITERS=ITERS):
     """
     Muestra una animación del metodo de visualizacion de Furchterman y Reginold
     Parametros
